@@ -7,5 +7,7 @@ This boilerplate is actually made to remove the overhead of doing the same initi
 
 ## Installation
 > git clone 'https://github.com/capt4ce/React-Redux_Boilerplate.git'
-  \nnpm install
-  \nnpm run dev
+
+> npm install
+
+> npm run dev
