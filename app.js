@@ -8,7 +8,7 @@ import createHistory from 'history/createBrowserHistory'
 import { ConnectedRouter as Router, routerMiddleware, push } from 'react-router-redux'
 import thunk from 'redux-thunk'
 import reducer from './src/store/reducers'
-import DevTools from './src/containers/DevTools'
+import DevTools from './src/containers_components/_DevTools'
 
 import throttle from 'lodash/throttle'
 import { loadState, saveState } from './localStorage'
@@ -21,44 +21,78 @@ import 'bootstrap'
 import MainContainer from './src/MainContainer'
 
 const history = createHistory()
-
 const middleware = routerMiddleware(history)
 const appMiddlewares = [thunk, middleware]
-
-const enhancer = compose(
-  applyMiddleware(...appMiddlewares),
-  DevTools.instrument()
-)
-
 const persistedState = loadState()
-const store = createStore(
-  reducer,
-  persistedState,
-  enhancer
-  // applyMiddleware(...appMiddlewares)
-)
 
-store.subscribe(throttle(() => {
-  saveState({
-    auths: store.getState().auths
-  })
-}, 1000))
+// ========================================
+// When the environment is development
+// ========================================
+if (process.env.NODE_ENV != 'production') {
+  const enhancer = compose(
+    applyMiddleware(...appMiddlewares),
+    DevTools.instrument()
+  )
 
-const renderApp = component => (
-  ReactDOM.render(
-    <Provider store={store}>
-      <AppContainer>
-        <div>
+  const store = createStore(
+    reducer,
+    persistedState,
+    enhancer
+    // applyMiddleware(...appMiddlewares) //already pured to enhancer
+  )
+
+  store.subscribe(throttle(() => {
+    saveState({
+      auths: store.getState().auths
+    })
+  }, 1000))
+
+  var renderApp = component => (
+    ReactDOM.render(
+      <Provider store={store}>
+        <AppContainer>
+          <div>
+            <Router history={history}>
+              <Route component={component} />
+            </Router>
+            <DevTools />
+          </div>
+        </AppContainer>
+      </Provider>,
+      document.getElementById('root')
+    )
+  );
+}
+// ========================================
+// Else if the environment is production
+// ========================================
+else {
+  const store = createStore(
+    reducer,
+    persistedState,
+    applyMiddleware(...appMiddlewares)
+  )
+
+  store.subscribe(throttle(() => {
+    saveState({
+      auths: store.getState().auths
+    })
+  }, 1000))
+
+  var renderApp = component => (
+    ReactDOM.render(
+      <Provider store={store}>
+        <AppContainer>
           <Router history={history}>
             <Route component={component} />
           </Router>
-          <DevTools />
-        </div>
-      </AppContainer>
-    </Provider>,
-    document.getElementById('root')
-  )
-);
+        </AppContainer>
+      </Provider>,
+      document.getElementById('root')
+    )
+  );
+}
+
 
 renderApp(MainContainer);
 
@@ -66,7 +100,7 @@ if (module.hot) {
   module.hot.accept('./src/App', () => {
     const NextApp = require('./src/MainContainer').default;
     //const newRoute = require('./routes').default;
-    console.info("Accepting change in App file");
+    if (process.env.NODE_ENV != 'production') console.info("You are in development environment. Accepting change in App file...");
     renderApp(NextApp);
   });
 }

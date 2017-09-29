@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import AppsRouter from './AppsRouter'
-import * as Conf from './baseconf'
+import AppsRoutes from './AppsRoutes'
 // import AuthenticatedNavigation from './components/Other/AuthenticatedNavigation'
 
 class App extends Component {
@@ -11,7 +10,7 @@ class App extends Component {
     let { auth } = this.props;
     return (
       <div>
-        <AppsRouter {...appProps} />
+        <AppsRoutes {...appProps} />
 
       </div>
     );
@@ -20,8 +19,7 @@ class App extends Component {
 }
 
 App.propTypes = {
-  auth: PropTypes.object,
-  leaves: PropTypes.object
+  auth: PropTypes.object
 }
 
 export default App;

@@ -8,7 +8,7 @@ module.exports = {
     'app': [
       'babel-polyfill',
       'react-hot-loader/patch',
-      './app.prod'
+      './app'
     ]
   },
   output: {

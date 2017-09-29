@@ -1,5 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
+var CONFIG = require('./CONFIG')
 
 module.exports = {
   // pake context buat change directorynya
@@ -90,7 +91,7 @@ module.exports = {
     historyApiFallback: true,
     compress: true,
     publicPath: '/dist',
-    port: 8000
+    port: CONFIG.APP_PORT
     // dikasih contentbase buat ngubahnya
   }
 }

@@ -1,29 +1,39 @@
-import { LOGIN_ATTEMPTED, LOGIN_SUCCESS, LOGIN_FAILED, LOGOUT } from '../../constants'
+import moment from 'moment'
+import { LOGIN_ATTEMPT, LOGIN_SUCCESS, LOGIN_FAILED, LOGOUT_SUCCESS } from '../../constants'
 
 const initialState = {
   username: null,
-  password: null,
   token: null,
   loggedAt: null
 }
 
 export default function auth(state = initialState, action) {
   switch (action.type) {
-    case LOGIN_ATTEMPTED:
+    case LOGIN_ATTEMPT:
       return Object.assign({}, state, {
         username: action.payload.username,
         password: action.payload.password
       })
+
     case LOGIN_SUCCESS:
+      console.log('login success')
       return Object.assign({}, state, {
-        password: action.payload.password,
+        username: action.payload.username,
         token: action.payload.token,
-        loggedAt: action.payload.loggedAt,
+        loggedAt: new moment(),
         redirectUrl: action.payload.redirectUrl
       })
-    case LOGOUT:
-      return initialState
+
     case LOGIN_FAILED:
+
+    case LOGOUT_SUCCESS:
+      console.log('logout success')
+      return Object.assign({}, state, {
+        username: null,
+        token: null,
+        loggedAt: null
+      })
+
     default:
       return state
   }

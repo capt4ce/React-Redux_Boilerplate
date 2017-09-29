@@ -5,7 +5,7 @@ import Home from './containers_components/Home'
 import Login from './containers_components/Login'
 import NoMatch from './containers_components/NoMatch'
 
-class AppsRouter extends Component {
+class AppsRoutes extends Component {
 
   constructor(props) {
     super(props);
@@ -17,8 +17,8 @@ class AppsRouter extends Component {
 
       <Switch>
         {/* Will redirect to auth in booting app */}
-        <Route exact path="/" component={Home} {...appProps} />
-        <Route exact path="/login" component={Login} {...appProps} />
+        <Route exact path="/" render={(props) => (<Home {...appProps} />)} />
+        <Route exact path="/login" {...appProps} render={(props) => (<Login {...appProps} />)} />
         {/* Accessing auth directly will bring to login page */}
         <Route component={NoMatch} />
       </Switch>
@@ -28,9 +28,8 @@ class AppsRouter extends Component {
 
 }
 
-AppsRouter.propTypes = {
-  auth: PropTypes.object,
-  leaves: PropTypes.object
+AppsRoutes.propTypes = {
+  auth: PropTypes.object
 }
 
-export default AppsRouter;
+export default AppsRoutes;
