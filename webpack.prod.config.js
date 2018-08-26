@@ -21,12 +21,14 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: [/node_modules/],
-        loader: 'babel-loader'
-      },
-      {
-        test: /\.jsx$/,
-        exclude: [/node_modules/],
-        loader: 'babel-loader'
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              presets: ["es2015", "react"]
+            }
+          }
+        ]
       },
       {
         test: /\.css$/,
@@ -71,16 +73,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(), // enable HMR
-    new webpack.ProvidePlugin({
-      jQuery: 'jQuery',
-      $: 'jQuery',
-      jquery: 'jQuery'
-    })
-  ],
-  resolve: {
-    alias: {
-      jQuery: require.resolve('jquery')
-    }
-  }
+    new webpack.HotModuleReplacementPlugin() // enable HMR
+  ]
 }

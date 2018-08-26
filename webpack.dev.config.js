@@ -1,50 +1,53 @@
-var path = require('path')
-var webpack = require('webpack')
-var CONFIG = require('./CONFIG')
+var path = require("path");
+var webpack = require("webpack");
+var CONFIG = require("./CONFIG");
 
 module.exports = {
   // pake context buat change directorynya
-  entry://'./index.js',
-  {
-    'app': [
-      'babel-polyfill',
-      'react-hot-loader/patch',
-      './app'
+  //'./index.js',
+  entry: {
+    app: [
+      "babel-polyfill",
+      "react-hot-loader/patch",
+      "./app"
       // './home.prod'
     ]
   },
   output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist'
+    filename: "bundle.js",
+    path: path.resolve(__dirname, "./dist"),
+    publicPath: "/dist"
   },
   module: {
     rules: [
       {
         test: /\.js$/,
         exclude: [/node_modules/],
-        loader: 'babel-loader'
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              presets: ["es2015", "react"]
+            }
+          }
+        ]
       },
       {
         test: /\.jsx$/,
         exclude: [/node_modules/],
-        loader: 'babel-loader'
+        loader: "babel-loader"
       },
       {
         test: /\.css$/,
-        use: [
-          'style-loader', 'css-loader', 'sass-loader'
-        ]
+        use: ["style-loader", "css-loader", "sass-loader"]
       },
       {
         test: /\.scss$/,
-        use: [
-          'style-loader', 'css-loader', 'sass-loader'
-        ]
+        use: ["style-loader", "css-loader", "sass-loader"]
       },
       {
         test: /\.html$/,
-        loader: 'html-loader'
+        loader: "html-loader"
       },
       {
         test: /\.png$/,
@@ -56,42 +59,32 @@ module.exports = {
       },
       {
         test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000&mimetype=application/font-woff'
+        loader: "url?limit=10000&mimetype=application/font-woff"
       },
       {
         test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000&mimetype=application/octet-stream'
+        loader: "url?limit=10000&mimetype=application/octet-stream"
       },
       {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'file'
+        loader: "file"
       },
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000&mimetype=image/svg+xml'
+        loader: "url?limit=10000&mimetype=image/svg+xml"
       }
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(), // enable HMR (Hot Module Reload)
-    new webpack.ProvidePlugin({
-      jQuery: 'jQuery',
-      $: 'jQuery',
-      jquery: 'jQuery'
-    })
+    new webpack.HotModuleReplacementPlugin() // enable HMR (Hot Module Reload)
   ],
-  resolve: {
-    alias: {
-      jQuery: require.resolve('jquery')
-    }
-  },
   devServer: {
     hot: true,
     contentBase: __dirname,
     historyApiFallback: true,
     compress: true,
-    publicPath: '/dist',
+    publicPath: "/dist",
     port: CONFIG.APP_PORT
     // dikasih contentbase buat ngubahnya
   }
-}
+};
